@@ -1,0 +1,50 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="brand">PrecisionCare</div>
+    <h2>Sign In</h2>
+
+    @if (errorMessage) {
+      <div class="alert alert-error">{{ errorMessage }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="form-field">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          [class.invalid]="username.invalid && username.touched"
+          autocomplete="username"
+        />
+        @if (username.invalid && username.touched) {
+          <span class="field-error">
+            @if (username.errors?.['required']) { Username is required. }
+            @else if (username.errors?.['maxlength']) { Username is too long. }
+          </span>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          [class.invalid]="password.invalid && password.touched"
+          autocomplete="current-password"
+        />
+        @if (password.invalid && password.touched) {
+          <span class="field-error">
+            @if (password.errors?.['required']) { Password is required. }
+            @else if (password.errors?.['minlength']) { Password must be at least 6 characters. }
+          </span>
+        }
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="isLoading">
+        {{ isLoading ? 'Signing in…' : 'Sign In' }}
+      </button>
+    </form>
+  </div>
+</div>

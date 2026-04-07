@@ -132,10 +132,30 @@ developer-modernization-assessment/
 ├── database/
 │   ├── schema.sql        # Original schema
 │   └── seed.sql          # Sample data
-├── api/                  # NEW: .NET Core Web API project
-│   └── ...
-├── frontend/             # NEW: Angular project
-│   └── ...
+├── api/                  # .NET Core 8 Web API (scaffolded)
+│   ├── Controllers/      # AuthController, PatientsController, AppointmentsController
+│   ├── Data/             # AppDbContext (EF Core)
+│   ├── DTOs/             # Request/Response models
+│   ├── Models/           # User, Patient, Appointment entities
+│   ├── Services/         # IAuthService, IPatientService, IAppointmentService + impls
+│   ├── Program.cs        # DI, JWT, CORS, Swagger wired up
+│   ├── appsettings.json
+│   └── appsettings.example.json
+├── frontend/             # Angular 18 app (scaffolded)
+│   └── src/app/
+│       ├── core/
+│       │   ├── guards/       # auth.guard, role.guard
+│       │   ├── interceptors/ # auth.interceptor (attaches JWT)
+│       │   ├── models/       # user, patient, appointment models
+│       │   ├── resolvers/    # patient-list, patient, patient-appointments, appointment-list
+│       │   └── services/     # AuthService, PatientService, AppointmentService
+│       ├── features/
+│       │   ├── auth/login/           # Reactive Form login page
+│       │   ├── patients/             # list, detail, form (all Reactive Forms)
+│       │   └── appointments/         # list, form (all Reactive Forms)
+│       └── shared/
+│           ├── components/           # navbar, layout
+│           └── validators/           # custom Angular validators
 └── README.md
 ```
 
@@ -192,12 +212,64 @@ The `classic-asp/` files are provided as reference only. They require IIS with C
 
 ### Setting Up the Modern Application
 
-Once you have built your `/api` and `/frontend` projects, add setup instructions to this README describing:
+Boilerplate for both projects is already scaffolded for you. Follow the steps below to get running.
 
-1. How to set up and seed the database
-2. How to configure and run the .NET Core API
-3. How to install dependencies and run the Angular front-end
-4. Any environment variables required (provide an `.env.example` or `appsettings.example.json`)
+#### 1. Database
+
+Run the scripts against a local SQL Server instance in order:
+
+```bash
+sqlcmd -S localhost -E -i database/schema.sql
+sqlcmd -S localhost -E -i database/seed.sql
+```
+
+> **Note:** The seed data uses plain-text passwords. Your first task is to migrate password storage to bcrypt hashing. After running the seed, update the `PasswordHash` column values using the `BCrypt.Net.BCrypt.HashPassword()` helper.
+
+#### 2. .NET Core API (`api/`)
+
+```bash
+cd api
+
+# Copy the example config and fill in your values
+cp appsettings.example.json appsettings.Development.json
+# Edit appsettings.Development.json:
+#   - Set the SQL Server connection string
+#   - Set a strong JWT SecretKey (min 32 chars)
+
+# Restore & run
+dotnet restore
+dotnet run
+# Swagger UI: https://localhost:5001/swagger
+```
+
+The project already includes:
+- Entity Framework Core + SQL Server provider
+- JWT Bearer authentication (wired in `Program.cs`)
+- `AppDbContext` with `User`, `Patient`, `Appointment` entities
+- Service interfaces + skeleton implementations (`Services/`)
+- `AuthController`, `PatientsController`, `AppointmentsController`
+
+**Your job:** complete the security hardening (password hashing, input validation) and add any missing business logic.
+
+#### 3. Angular Front-End (`frontend/`)
+
+```bash
+cd frontend
+npm install
+ng serve
+# App: http://localhost:4200
+```
+
+The project already includes:
+- Standalone Angular 18 components with `ReactiveFormsModule` throughout
+- `AuthService` with JWT storage and Angular Signals
+- `AuthInterceptor` — automatically attaches the Bearer token to every request
+- `AuthGuard` and `RoleGuard` (functional guards)
+- Route resolvers: `patientListResolver`, `patientResolver`, `patientAppointmentsResolver`, `appointmentListResolver`
+- All routes wired in `app.routes.ts` with guards and resolvers attached
+- Complete SCSS styling (global utilities in `styles.scss`)
+
+**Your job:** connect any remaining gaps, implement error states, and add any additional features required by the assessment.
 
 ---
 

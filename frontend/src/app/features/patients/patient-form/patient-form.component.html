@@ -1,0 +1,118 @@
+<h1>{{ isEdit ? 'Edit Patient' : 'Add New Patient' }}</h1>
+
+@if (errorMessage) {
+  <div class="alert alert-error">{{ errorMessage }}</div>
+}
+
+<div class="card form-card">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="form-grid">
+      <!-- First Name -->
+      <div class="form-field">
+        <label>First Name <span class="required">*</span></label>
+        <input type="text" formControlName="firstName" [class.invalid]="f.firstName.invalid && f.firstName.touched" />
+        @if (f.firstName.invalid && f.firstName.touched) {
+          <span class="field-error">
+            @if (f.firstName.errors?.['required']) { First name is required. }
+            @else if (f.firstName.errors?.['maxlength']) { Max 50 characters. }
+          </span>
+        }
+      </div>
+
+      <!-- Last Name -->
+      <div class="form-field">
+        <label>Last Name <span class="required">*</span></label>
+        <input type="text" formControlName="lastName" [class.invalid]="f.lastName.invalid && f.lastName.touched" />
+        @if (f.lastName.invalid && f.lastName.touched) {
+          <span class="field-error">
+            @if (f.lastName.errors?.['required']) { Last name is required. }
+          </span>
+        }
+      </div>
+
+      <!-- Date of Birth -->
+      <div class="form-field">
+        <label>Date of Birth <span class="required">*</span></label>
+        <input type="date" formControlName="dateOfBirth" [class.invalid]="f.dateOfBirth.invalid && f.dateOfBirth.touched" />
+        @if (f.dateOfBirth.invalid && f.dateOfBirth.touched) {
+          <span class="field-error">
+            @if (f.dateOfBirth.errors?.['required']) { Date of birth is required. }
+            @else if (f.dateOfBirth.errors?.['futureDate']) { Date of birth cannot be in the future. }
+            @else if (f.dateOfBirth.errors?.['invalidDate']) { Invalid date. }
+          </span>
+        }
+      </div>
+
+      <!-- Gender -->
+      <div class="form-field">
+        <label>Gender <span class="required">*</span></label>
+        <select formControlName="gender" [class.invalid]="f.gender.invalid && f.gender.touched">
+          <option value="">-- Select --</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+        @if (f.gender.invalid && f.gender.touched) {
+          <span class="field-error">Gender is required.</span>
+        }
+      </div>
+
+      <!-- Email -->
+      <div class="form-field">
+        <label>Email</label>
+        <input type="email" formControlName="email" [class.invalid]="f.email.invalid && f.email.touched" />
+        @if (f.email.invalid && f.email.touched) {
+          <span class="field-error">Enter a valid email address.</span>
+        }
+      </div>
+
+      <!-- Phone -->
+      <div class="form-field">
+        <label>Phone</label>
+        <input type="text" formControlName="phone" />
+      </div>
+
+      <!-- Insurance ID -->
+      <div class="form-field">
+        <label>Insurance ID</label>
+        <input type="text" formControlName="insuranceId" />
+      </div>
+    </div>
+
+    <!-- Address block -->
+    <div class="form-field full-width">
+      <label>Address</label>
+      <input type="text" formControlName="address" />
+    </div>
+    <div class="form-grid">
+      <div class="form-field">
+        <label>City</label>
+        <input type="text" formControlName="city" />
+      </div>
+      <div class="form-field">
+        <label>State</label>
+        <input type="text" formControlName="state" />
+      </div>
+      <div class="form-field">
+        <label>Zip Code</label>
+        <input type="text" formControlName="zipCode" />
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="form-field full-width">
+      <label>Notes</label>
+      <textarea formControlName="notes" rows="3"></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+        {{ isLoading ? 'Saving…' : (isEdit ? 'Save Changes' : 'Create Patient') }}
+      </button>
+      <a [routerLink]="isEdit ? ['/patients', existingPatient?.patientId] : ['/patients']"
+         class="btn btn-secondary">
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>

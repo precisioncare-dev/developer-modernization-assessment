@@ -1,0 +1,82 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  h1 { margin: 0; color: #2c3e50; }
+
+  .toolbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .search-form {
+    display: flex;
+    gap: 8px;
+
+    .search-input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 240px;
+      font-size: 14px;
+    }
+  }
+}
+
+.table-card {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+
+    th {
+      background: #2c3e50;
+      color: #fff;
+      padding: 11px 14px;
+      text-align: left;
+      font-weight: 500;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #eee;
+      color: #333;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f7fbff; }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  color: #888;
+  padding: 32px !important;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  a, button {
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    background: none;
+    padding: 0;
+  }
+
+  .link-view   { color: #3498db; }
+  .link-edit   { color: #27ae60; }
+  .link-delete { color: #e74c3c; }
+}

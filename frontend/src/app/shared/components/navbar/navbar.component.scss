@@ -1,0 +1,72 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #2c3e50;
+  color: #fff;
+  padding: 0 24px;
+  height: 56px;
+
+  .brand {
+    font-size: 20px;
+    font-weight: 700;
+    color: #3498db;
+    letter-spacing: 0.5px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 24px;
+
+    a {
+      color: #bdc3c7;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+
+      &:hover,
+      &.active {
+        color: #fff;
+      }
+    }
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+
+    .user-name {
+      color: #ecf0f1;
+    }
+
+    .user-role {
+      background: #3498db;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    button {
+      background: transparent;
+      border: 1px solid #7f8c8d;
+      color: #bdc3c7;
+      padding: 5px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+
+      &:hover {
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        border-color: #fff;
+      }
+    }
+  }
+}

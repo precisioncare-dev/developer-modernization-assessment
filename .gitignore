@@ -35,8 +35,10 @@ artifacts/
 # =============================================
 .env
 .env.*
-**/appsettings.Development.json
+# appsettings.Development.json is committed as a non-secret baseline.
+# Store real secrets using: dotnet user-secrets
 **/appsettings.Local.json
+**/appsettings.Production.json
 
 # =============================================
 # IDE / OS
