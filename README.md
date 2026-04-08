@@ -141,6 +141,16 @@ developer-modernization-assessment/
 │   ├── Program.cs        # DI, JWT, CORS, Swagger — fully wired (do not modify)
 │   ├── appsettings.json
 │   └── appsettings.example.json
+├── api.tests/            # xUnit test project — implement the TODO stubs
+│   ├── Controllers/
+│   │   ├── AuthControllerTests.cs         # HTTP-layer tests for AuthController
+│   │   ├── PatientsControllerTests.cs     # HTTP-layer tests for PatientsController
+│   │   └── AppointmentsControllerTests.cs # HTTP-layer tests for AppointmentsController
+│   ├── Services/
+│   │   ├── AuthServiceTests.cs            # Unit tests for AuthService
+│   │   ├── PatientServiceTests.cs         # Unit tests for PatientService
+│   │   └── AppointmentServiceTests.cs     # Unit tests for AppointmentService
+│   └── PrecisionCare.Api.Tests.csproj
 ├── frontend/             # Angular 19 standalone app scaffold
 │   └── src/app/
 │       ├── app.config.ts     # Providers wired (do not modify)
@@ -190,12 +200,20 @@ Your submission will be evaluated on the following:
 - [ ] Consistent UI/UX matching the feature set of the legacy app
 - [ ] Proper error handling for API failures
 
-### Code Quality & Practices (20 points)
+### Code Quality & Practices (15 points)
 - [ ] Project structure is clean and follows conventions for each technology
 - [ ] No dead code or debugging artifacts
 - [ ] Meaningful commit history
 - [ ] `README.md` updated with instructions on how to run the project locally
 - [ ] Environment configuration is handled properly (no secrets in source)
+
+### Unit Testing (10 points)
+- [ ] All TODO stubs in `api.tests/` are replaced with real test implementations
+- [ ] Service tests use an EF Core in-memory database (no live SQL Server required)
+- [ ] Controller tests mock all service dependencies with Moq
+- [ ] Every test follows the **Arrange / Act / Assert** pattern with clear variable names
+- [ ] Tests cover both the happy path and error/edge cases for each method
+- [ ] `dotnet test` passes with 0 failures
 
 ---
 
@@ -256,7 +274,34 @@ dotnet run
 
 **Your job:** implement the service methods and controller action bodies. Pay close attention to the security requirements: password hashing, parameterized queries, JWT generation, and role-based authorization.
 
-#### 3. Angular Front-End (`frontend/`)
+#### 3. Unit Tests (`api.tests/`)
+
+```bash
+cd api.tests
+dotnet test
+# Runs all 50 test stubs — all skip until you implement them.
+
+# Run with code coverage report:
+dotnet test --collect:"XPlat Code Coverage"
+```
+
+**What's already provided:**
+
+| File(s) | Description |
+|---|---|
+| `PrecisionCare.Api.Tests.csproj` | xUnit + Moq + FluentAssertions + Microsoft.AspNetCore.Mvc.Testing |
+| `Services/AuthServiceTests.cs` | 5 stub tests covering `LoginAsync` (happy path, wrong password, unknown user, inactive account, JWT claims) |
+| `Services/PatientServiceTests.cs` | 10 stub tests covering all 5 `IPatientService` methods including edge cases |
+| `Services/AppointmentServiceTests.cs` | 12 stub tests covering all 5 `IAppointmentService` methods including filter combinations |
+| `Controllers/AuthControllerTests.cs` | 3 stub tests for HTTP response codes from `AuthController` |
+| `Controllers/PatientsControllerTests.cs` | 9 stub tests covering all `PatientsController` actions |
+| `Controllers/AppointmentsControllerTests.cs` | 8 stub tests covering all `AppointmentsController` actions |
+
+**Your job:** replace every `throw new NotImplementedException(...)` in `api.tests/` with a real test body. Each stub has a detailed `// TODO:` comment explaining the exact Arrange / Act / Assert steps expected.
+
+> **Tip:** Service tests should use `new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options` so each test gets a fresh, isolated store without a SQL Server connection. Add the `Microsoft.EntityFrameworkCore.InMemory` package to `api.tests` if it is not already present.
+
+#### 4. Angular Front-End (`frontend/`)
 
 ```bash
 cd frontend
