@@ -1,0 +1,21 @@
+<%
+' global.asa - Application-level events for PrecisionCare Classic ASP
+
+Sub Application_OnStart()
+    ' NOTE: Hardcoded connection string - credentials in source code (security issue)
+    Application("ConnString") = "Provider=SQLOLEDB;Data Source=localhost;Initial Catalog=PrecisionCareDB;User ID=sa;Password=Admin123!"
+    Application("AppName") = "PrecisionCare Patient Management"
+End Sub
+
+Sub Application_OnEnd()
+    ' Nothing to clean up
+End Sub
+
+Sub Session_OnStart()
+    Session.Timeout = 30
+End Sub
+
+Sub Session_OnEnd()
+    ' Nothing to clean up
+End Sub
+%>

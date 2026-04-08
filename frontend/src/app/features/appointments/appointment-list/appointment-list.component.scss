@@ -1,0 +1,83 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  h1 { margin: 0; color: #2c3e50; }
+}
+
+.filter-card {
+  margin-bottom: 20px;
+  padding: 16px 20px;
+
+  .filter-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 140px;
+
+    label { font-size: 13px; font-weight: 600; color: #555; }
+
+    select, input {
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+  }
+
+  .filter-actions {
+    display: flex;
+    gap: 8px;
+    align-self: flex-end;
+    padding-bottom: 1px;
+  }
+}
+
+.table-card {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+
+    th {
+      background: #2c3e50;
+      color: #fff;
+      padding: 11px 14px;
+      text-align: left;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #eee;
+      color: #333;
+
+      a { color: #3498db; text-decoration: none; }
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f7fbff; }
+  }
+}
+
+.status {
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  &.status-Scheduled  { background: #d6eaf8; color: #1a5276; }
+  &.status-Completed  { background: #d5f5e3; color: #1e8449; }
+  &.status-Cancelled  { background: #fdecea; color: #922b21; }
+  &.status-NoShow     { background: #fef9e7; color: #9a7d0a; }
+}
+
+.empty-state { text-align: center; color: #888; padding: 32px !important; }

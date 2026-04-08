@@ -1,0 +1,72 @@
+.page-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+h1 { color: #2c3e50; margin-bottom: 20px; }
+h2 { color: #2c3e50; margin: 0 0 16px; }
+
+.info-card .fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+
+  @media (max-width: 640px) { grid-template-columns: 1fr; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    &.full { grid-column: 1 / -1; }
+
+    .label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    span:last-child {
+      font-size: 14px;
+      color: #2c3e50;
+    }
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  th {
+    background: #ecf0f1;
+    padding: 9px 12px;
+    text-align: left;
+    font-size: 13px;
+    color: #555;
+  }
+
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #eee;
+  }
+
+  tr:last-child td { border-bottom: none; }
+}
+
+.status {
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.status-Scheduled  { background: #d6eaf8; color: #1a5276; }
+  &.status-Completed  { background: #d5f5e3; color: #1e8449; }
+  &.status-Cancelled  { background: #fdecea; color: #922b21; }
+  &.status-NoShow     { background: #fef9e7; color: #9a7d0a; }
+}
+
+.empty-state { color: #888; font-size: 14px; }
