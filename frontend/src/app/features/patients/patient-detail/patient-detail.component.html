@@ -1,57 +1,10 @@
-<div class="page-actions">
-  <a routerLink="/patients" class="btn btn-secondary">← Back</a>
-  <a [routerLink]="['/patients', patient.patientId, 'edit']" class="btn btn-primary">Edit</a>
-  <a [routerLink]="['/appointments/new']" [queryParams]="{ patientId: patient.patientId }" class="btn btn-success">
-    + Add Appointment
-  </a>
-</div>
-
-<h1>{{ patient.firstName }} {{ patient.lastName }}</h1>
-
-<div class="card info-card">
-  <h2>Patient Information</h2>
-  <div class="fields">
-    <div class="field"><span class="label">Date of Birth</span><span>{{ patient.dateOfBirth | date:'mediumDate' }}</span></div>
-    <div class="field"><span class="label">Gender</span><span>{{ patient.gender }}</span></div>
-    <div class="field"><span class="label">Email</span><span>{{ patient.email ?? '—' }}</span></div>
-    <div class="field"><span class="label">Phone</span><span>{{ patient.phone ?? '—' }}</span></div>
-    <div class="field"><span class="label">Address</span><span>{{ patient.address ?? '—' }}</span></div>
-    <div class="field"><span class="label">City</span><span>{{ patient.city ?? '—' }}</span></div>
-    <div class="field"><span class="label">State</span><span>{{ patient.state ?? '—' }}</span></div>
-    <div class="field"><span class="label">Zip Code</span><span>{{ patient.zipCode ?? '—' }}</span></div>
-    <div class="field"><span class="label">Insurance ID</span><span>{{ patient.insuranceId ?? '—' }}</span></div>
-    <div class="field full"><span class="label">Notes</span><span>{{ patient.notes ?? '—' }}</span></div>
-  </div>
-</div>
-
-<div class="card">
-  <h2>Appointments</h2>
-  @if (appointments.length === 0) {
-    <p class="empty-state">No appointments on record.</p>
-  } @else {
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Duration</th>
-          <th>Reason</th>
-          <th>Provider</th>
-          <th>Status</th>
-          <th>Notes</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (appt of appointments; track appt.appointmentId) {
-          <tr>
-            <td>{{ appt.appointmentDate | date:'medium' }}</td>
-            <td>{{ appt.duration }} min</td>
-            <td>{{ appt.reason }}</td>
-            <td>{{ appt.providerName }}</td>
-            <td><span [class]="'status status-' + appt.status">{{ appt.status }}</span></td>
-            <td>{{ appt.notes ?? '—' }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  }
-</div>
+<!-- TODO: Implement the patient detail template.
+  Required elements:
+  - Back / Edit / "+ Add Appointment" action links
+  - Patient info card showing all demographic fields
+    (data comes from `patient` property resolved before component load)
+  - Appointments history section with a table (date, duration, reason, provider, status, notes)
+    (data comes from `appointments` property resolved before component load)
+  - Empty-state message when no appointments exist
+-->
+<p>TODO: Implement patient detail template</p>

@@ -1,7 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
+import { Component } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -11,40 +9,14 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  private fb      = inject(FormBuilder);
-  private auth    = inject(AuthService);
-  private router  = inject(Router);
-  private route   = inject(ActivatedRoute);
+  // TODO: Inject FormBuilder, AuthService, Router, and ActivatedRoute.
 
-  protected form = this.fb.nonNullable.group({
-    username: ['', [Validators.required, Validators.maxLength(50)]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
-  });
+  // TODO: Define a reactive form with `username` and `password` controls.
+  //       Apply appropriate Validators (required, minLength, maxLength).
 
-  protected errorMessage = '';
-  protected isLoading    = false;
-
-  protected get username() { return this.form.controls.username; }
-  protected get password() { return this.form.controls.password; }
-
-  protected onSubmit(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    this.isLoading    = true;
-    this.errorMessage = '';
-
-    this.auth.login(this.form.getRawValue()).subscribe({
-      next: () => {
-        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/patients';
-        this.router.navigateByUrl(returnUrl);
-      },
-      error: () => {
-        this.errorMessage = 'Invalid username or password.';
-        this.isLoading    = false;
-      }
-    });
-  }
+  // TODO: Implement onSubmit():
+  //   1. Guard against invalid form state (mark all controls as touched).
+  //   2. Call authService.login(credentials).subscribe(...)
+  //   3. On success navigate to `returnUrl` query param or '/patients'.
+  //   4. On error display a user-friendly error message.
 }

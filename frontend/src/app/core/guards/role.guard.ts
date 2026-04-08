@@ -8,6 +8,11 @@ import { AuthService } from '../services/auth.service';
  */
 export function roleGuard(...allowedRoles: string[]): CanActivateFn {
   return (_route, _state) => {
+    // TODO: Inject AuthService and Router.
+    // 1. If the user is not logged in, redirect to /login.
+    // 2. If the user IS logged in but does not have one of the allowedRoles,
+    //    redirect to /patients (or an appropriate "access denied" route).
+    // 3. Otherwise allow navigation.
     const auth   = inject(AuthService);
     const router = inject(Router);
 
@@ -15,9 +20,8 @@ export function roleGuard(...allowedRoles: string[]): CanActivateFn {
       return router.createUrlTree(['/login']);
     }
 
-    if (auth.hasRole(...allowedRoles)) return true;
-
-    // User is authenticated but doesn't have the required role
+    // TODO: Implement role check — replace this placeholder with a call to
+    // auth.hasRole(...allowedRoles) once AuthService.hasRole is implemented.
     return router.createUrlTree(['/patients']);
   };
 }

@@ -1,9 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { Patient } from '../../../core/models/patient.model';
-import { Appointment } from '../../../core/models/appointment.model';
-import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-patient-detail',
@@ -13,10 +10,10 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrls: ['./patient-detail.component.scss']
 })
 export class PatientDetailComponent {
-  private route  = inject(ActivatedRoute);
-  protected auth = inject(AuthService);
+  // TODO: Inject ActivatedRoute and AuthService.
 
-  // Data provided by resolvers — no loading logic in the component
-  protected patient:      Patient     = this.route.snapshot.data['patient'];
-  protected appointments: Appointment[] = this.route.snapshot.data['appointments'] ?? [];
+  // Both datasets are pre-loaded by resolvers — read from the route snapshot:
+  //   this.route.snapshot.data['patient']       → Patient
+  //   this.route.snapshot.data['appointments']  → Appointment[]
+  // The component should NOT make its own HTTP calls.
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest } from '../models/appointment.model';
 import { environment } from '../../../environments/environment';
@@ -11,27 +11,27 @@ export class AppointmentService {
   constructor(private http: HttpClient) {}
 
   getAll(status?: string, date?: string): Observable<Appointment[]> {
-    let params = new HttpParams();
-    if (status) params = params.set('status', status);
-    if (date)   params = params.set('date', date);
-    return this.http.get<Appointment[]>(this.base, { params });
+    // TODO: GET ${this.base} with optional `status` and `date` query params.
+    throw new Error('Not implemented: AppointmentService.getAll');
   }
 
   getById(id: number): Observable<Appointment> {
-    return this.http.get<Appointment>(`${this.base}/${id}`);
+    // TODO: GET ${this.base}/${id}.
+    throw new Error('Not implemented: AppointmentService.getById');
   }
 
   getByPatient(patientId: number): Observable<Appointment[]> {
-    return this.http.get<Appointment[]>(
-      `${environment.apiUrl}/api/patients/${patientId}/appointments`
-    );
+    // TODO: GET `${environment.apiUrl}/api/patients/${patientId}/appointments`.
+    throw new Error('Not implemented: AppointmentService.getByPatient');
   }
 
   create(request: CreateAppointmentRequest): Observable<Appointment> {
-    return this.http.post<Appointment>(this.base, request);
+    // TODO: POST to ${this.base} with the request body.
+    throw new Error('Not implemented: AppointmentService.create');
   }
 
   update(id: number, request: UpdateAppointmentRequest): Observable<Appointment> {
-    return this.http.put<Appointment>(`${this.base}/${id}`, request);
+    // TODO: PUT to ${this.base}/${id} with the request body.
+    throw new Error('Not implemented: AppointmentService.update');
   }
 }

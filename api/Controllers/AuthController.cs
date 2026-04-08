@@ -14,10 +14,9 @@ public class AuthController(IAuthService authService) : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var response = await authService.LoginAsync(request);
-        if (response is null)
-            return Unauthorized(new { message = "Invalid username or password." });
-
-        return Ok(response);
+        // TODO: Call authService.LoginAsync(request).
+        // Return 200 OK with the LoginResponse on success, or 401 Unauthorized
+        // with a generic error message on failure (do not reveal which field failed).
+        throw new NotImplementedException();
     }
 }

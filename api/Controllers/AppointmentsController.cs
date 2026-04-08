@@ -20,8 +20,8 @@ public class AppointmentsController(IAppointmentService appointmentService) : Co
     [ProducesResponseType(typeof(IEnumerable<AppointmentDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll([FromQuery] string? status, [FromQuery] DateOnly? date)
     {
-        var appointments = await appointmentService.GetAllAsync(status, date);
-        return Ok(appointments);
+        // TODO: Return 200 OK with the filtered appointment list.
+        throw new NotImplementedException();
     }
 
     /// <summary>Get a single appointment by ID.</summary>
@@ -30,8 +30,8 @@ public class AppointmentsController(IAppointmentService appointmentService) : Co
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
-        var appt = await appointmentService.GetByIdAsync(id);
-        return appt is null ? NotFound() : Ok(appt);
+        // TODO: Return 200 OK with the appointment, or 404 Not Found.
+        throw new NotImplementedException();
     }
 
     /// <summary>Get all appointments for a specific patient.</summary>
@@ -39,22 +39,23 @@ public class AppointmentsController(IAppointmentService appointmentService) : Co
     [ProducesResponseType(typeof(IEnumerable<AppointmentDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetByPatient(int patientId)
     {
-        var appointments = await appointmentService.GetByPatientIdAsync(patientId);
-        return Ok(appointments);
+        // TODO: Return 200 OK with all appointments for the patient.
+        throw new NotImplementedException();
     }
 
-    /// <summary>Create a new appointment.</summary>
+    /// <summary>Create a new appointment. Requires Admin or Staff role.</summary>
     [HttpPost("api/appointments")]
     [Authorize(Roles = "Admin,Staff")]
     [ProducesResponseType(typeof(AppointmentDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] CreateAppointmentRequest request)
     {
-        var appt = await appointmentService.CreateAsync(request, CurrentUserId);
-        return CreatedAtAction(nameof(GetById), new { id = appt.AppointmentId }, appt);
+        // TODO: Call appointmentService.CreateAsync(request, CurrentUserId).
+        // Return 201 Created with a Location header.
+        throw new NotImplementedException();
     }
 
-    /// <summary>Update an existing appointment.</summary>
+    /// <summary>Update an existing appointment. Requires Admin or Staff role.</summary>
     [HttpPut("api/appointments/{id:int}")]
     [Authorize(Roles = "Admin,Staff")]
     [ProducesResponseType(typeof(AppointmentDto), StatusCodes.Status200OK)]
@@ -62,7 +63,7 @@ public class AppointmentsController(IAppointmentService appointmentService) : Co
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateAppointmentRequest request)
     {
-        var appt = await appointmentService.UpdateAsync(id, request);
-        return appt is null ? NotFound() : Ok(appt);
+        // TODO: Return 200 OK with the updated appointment, or 404 Not Found.
+        throw new NotImplementedException();
     }
 }

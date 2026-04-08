@@ -1,10 +1,7 @@
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { Patient } from '../../../core/models/patient.model';
-import { PatientService } from '../../../core/services/patient.service';
-import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-patient-list',
@@ -14,40 +11,19 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrls: ['./patient-list.component.scss']
 })
 export class PatientListComponent {
-  private route          = inject(ActivatedRoute);
-  private router         = inject(Router);
-  private patientService = inject(PatientService);
-  protected auth         = inject(AuthService);
-  private fb             = inject(FormBuilder);
+  // TODO: Inject ActivatedRoute, Router, PatientService, AuthService, FormBuilder.
 
-  // Data provided by the resolver — no loading logic in the component
-  protected patients: Patient[] = this.route.snapshot.data['patients'] ?? [];
+  // Data is pre-loaded by patientListResolver — read from the route snapshot:
+  //   this.route.snapshot.data['patients']
+  // The component should NOT make its own HTTP calls for initial data.
 
-  protected searchForm = this.fb.nonNullable.group({
-    search: [this.route.snapshot.queryParamMap.get('search') ?? '']
-  });
+  // TODO: Define a search reactive form with a single `search` control.
 
-  protected errorMessage = '';
+  // TODO: Implement onSearch():
+  //   Navigate on the same route with an updated `search` query param so the
+  //   resolver automatically reloads the data.
 
-  protected onSearch(): void {
-    const search = this.searchForm.getRawValue().search.trim() || undefined;
-    // Navigate with query param so the resolver reloads data
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { search: search ?? null },
-      queryParamsHandling: 'merge'
-    });
-  }
-
-  protected onDelete(id: number): void {
-    if (!confirm('Are you sure you want to delete this patient?')) return;
-    this.patientService.delete(id).subscribe({
-      next: () => {
-        this.patients = this.patients.filter(p => p.patientId !== id);
-      },
-      error: () => {
-        this.errorMessage = 'Failed to delete patient. Please try again.';
-      }
-    });
-  }
+  // TODO: Implement onDelete(id: number):
+  //   Confirm with the user, call patientService.delete(id), then remove the
+  //   deleted patient from the local list on success.
 }

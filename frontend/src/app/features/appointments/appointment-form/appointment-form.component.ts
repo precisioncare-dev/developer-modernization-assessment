@@ -1,11 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AppointmentService } from '../../../core/services/appointment.service';
-import { PatientService } from '../../../core/services/patient.service';
-import { Patient } from '../../../core/models/patient.model';
-import { futureDateValidator } from '../../../shared/validators/custom-validators';
-import { Observable } from 'rxjs';
+import { Component } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-appointment-form',
@@ -14,57 +9,20 @@ import { Observable } from 'rxjs';
   templateUrl: './appointment-form.component.html',
   styleUrls: ['./appointment-form.component.scss']
 })
-export class AppointmentFormComponent implements OnInit {
-  private fb                  = inject(FormBuilder);
-  private appointmentService  = inject(AppointmentService);
-  private patientService      = inject(PatientService);
-  private route               = inject(ActivatedRoute);
-  private router              = inject(Router);
+export class AppointmentFormComponent {
+  // TODO: Inject FormBuilder, AppointmentService, PatientService, ActivatedRoute, Router.
 
-  protected patients: Patient[] = [];
-  protected isLoading    = false;
-  protected errorMessage = '';
+  // TODO: Define a reactive form covering all appointment fields:
+  //   patientId, appointmentDate, duration, reason, status, providerName, notes.
+  //   Apply appropriate Validators.
 
-  readonly statuses = ['Scheduled', 'Completed', 'Cancelled', 'NoShow'];
+  // TODO: In ngOnInit:
+  //   - Load the patient list for the dropdown via patientService.getAll().
+  //   - Pre-select a patient if a `patientId` query param is present.
 
-  protected form = this.fb.nonNullable.group({
-    patientId:       [0, [Validators.required, Validators.min(1)]],
-    appointmentDate: ['', [Validators.required]],
-    duration:        [30, [Validators.required, Validators.min(5), Validators.max(480)]],
-    reason:          ['', [Validators.required, Validators.maxLength(500)]],
-    status:          ['Scheduled', Validators.required],
-    providerName:    ['', [Validators.required, Validators.maxLength(100)]],
-    notes:           ['']
-  });
-
-  protected get f() { return this.form.controls; }
-
-  ngOnInit(): void {
-    // Pre-select patient if navigated from patient-detail page
-    const preselectedPatientId = this.route.snapshot.queryParamMap.get('patientId');
-    if (preselectedPatientId) {
-      this.form.patchValue({ patientId: Number(preselectedPatientId) });
-    }
-
-    // Load patient dropdown list
-    this.patientService.getAll().subscribe(patients => (this.patients = patients));
-  }
-
-  protected onSubmit(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    this.isLoading    = true;
-    this.errorMessage = '';
-
-    this.appointmentService.create(this.form.getRawValue() as any).subscribe({
-      next: () => this.router.navigate(['/appointments']),
-      error: () => {
-        this.errorMessage = 'Failed to save appointment. Please try again.';
-        this.isLoading    = false;
-      }
-    });
-  }
+  // TODO: Implement onSubmit():
+  //   1. Guard against invalid state.
+  //   2. Call appointmentService.create(form.getRawValue()).
+  //   3. Navigate to /appointments on success.
+  //   4. Show an error message on failure.
 }

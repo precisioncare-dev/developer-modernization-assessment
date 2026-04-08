@@ -1,7 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using PrecisionCare.Api.Data;
 using PrecisionCare.Api.DTOs.Appointments;
-using PrecisionCare.Api.Models;
 
 namespace PrecisionCare.Api.Services;
 
@@ -9,98 +7,39 @@ public class AppointmentService(AppDbContext db) : IAppointmentService
 {
     public async Task<IEnumerable<AppointmentDto>> GetAllAsync(string? status = null, DateOnly? date = null)
     {
-        var query = db.Appointments
-            .AsNoTracking()
-            .Include(a => a.Patient);
-
-        IQueryable<Appointment> filtered = query;
-
-        if (!string.IsNullOrWhiteSpace(status))
-            filtered = filtered.Where(a => a.Status == status);
-
-        if (date.HasValue)
-            filtered = filtered.Where(a => DateOnly.FromDateTime(a.AppointmentDate) == date.Value);
-
-        return await filtered
-            .OrderBy(a => a.AppointmentDate)
-            .Select(a => ToDto(a))
-            .ToListAsync();
+        // TODO: Query db.Appointments (Include the related Patient).
+        // Apply optional filters for status and date when provided.
+        // Order by AppointmentDate ascending and project to AppointmentDto.
+        throw new NotImplementedException();
     }
 
     public async Task<AppointmentDto?> GetByIdAsync(int id)
     {
-        var a = await db.Appointments
-            .AsNoTracking()
-            .Include(a => a.Patient)
-            .FirstOrDefaultAsync(a => a.AppointmentId == id);
-        return a is null ? null : ToDto(a);
+        // TODO: Return the appointment with the matching id (Include Patient),
+        // or null if not found.
+        throw new NotImplementedException();
     }
 
     public async Task<IEnumerable<AppointmentDto>> GetByPatientIdAsync(int patientId)
     {
-        return await db.Appointments
-            .AsNoTracking()
-            .Include(a => a.Patient)
-            .Where(a => a.PatientId == patientId)
-            .OrderByDescending(a => a.AppointmentDate)
-            .Select(a => ToDto(a))
-            .ToListAsync();
+        // TODO: Return all appointments for the specified patient, ordered by
+        // AppointmentDate descending.
+        throw new NotImplementedException();
     }
 
     public async Task<AppointmentDto> CreateAsync(CreateAppointmentRequest request, int createdBy)
     {
-        var appointment = new Appointment
-        {
-            PatientId = request.PatientId,
-            AppointmentDate = request.AppointmentDate,
-            Duration = request.Duration,
-            Reason = request.Reason,
-            Status = request.Status,
-            ProviderName = request.ProviderName,
-            Notes = request.Notes,
-            CreatedBy = createdBy
-        };
-
-        db.Appointments.Add(appointment);
-        await db.SaveChangesAsync();
-
-        await db.Entry(appointment).Reference(a => a.Patient).LoadAsync();
-        return ToDto(appointment);
+        // TODO: Map the request to a new Appointment entity, set CreatedBy,
+        // persist via SaveChangesAsync, eager-load the Patient navigation,
+        // and return an AppointmentDto.
+        throw new NotImplementedException();
     }
 
     public async Task<AppointmentDto?> UpdateAsync(int id, UpdateAppointmentRequest request)
     {
-        var appointment = await db.Appointments
-            .Include(a => a.Patient)
-            .FirstOrDefaultAsync(a => a.AppointmentId == id);
-
-        if (appointment is null) return null;
-
-        appointment.PatientId = request.PatientId;
-        appointment.AppointmentDate = request.AppointmentDate;
-        appointment.Duration = request.Duration;
-        appointment.Reason = request.Reason;
-        appointment.Status = request.Status;
-        appointment.ProviderName = request.ProviderName;
-        appointment.Notes = request.Notes;
-
-        await db.SaveChangesAsync();
-        return ToDto(appointment);
+        // TODO: Load the appointment by id (Include Patient), apply all fields
+        // from the request, save, and return the updated AppointmentDto.
+        // Return null if the appointment does not exist.
+        throw new NotImplementedException();
     }
-
-    private static AppointmentDto ToDto(Appointment a) => new()
-    {
-        AppointmentId = a.AppointmentId,
-        PatientId = a.PatientId,
-        PatientFullName = a.Patient is not null
-            ? $"{a.Patient.FirstName} {a.Patient.LastName}"
-            : string.Empty,
-        AppointmentDate = a.AppointmentDate,
-        Duration = a.Duration,
-        Reason = a.Reason,
-        Status = a.Status,
-        ProviderName = a.ProviderName,
-        Notes = a.Notes,
-        CreatedAt = a.CreatedAt
-    };
 }

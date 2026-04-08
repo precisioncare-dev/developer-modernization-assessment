@@ -1,8 +1,7 @@
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { Appointment } from '../../../core/models/appointment.model';
 
 @Component({
   selector: 'app-appointment-list',
@@ -12,34 +11,18 @@ import { Appointment } from '../../../core/models/appointment.model';
   styleUrls: ['./appointment-list.component.scss']
 })
 export class AppointmentListComponent {
-  private route  = inject(ActivatedRoute);
-  private router = inject(Router);
-  private fb     = inject(FormBuilder);
+  // TODO: Inject ActivatedRoute, Router, FormBuilder.
 
-  // Data provided by the resolver — no loading logic in the component
-  protected appointments: Appointment[] = this.route.snapshot.data['appointments'] ?? [];
+  // Data is pre-loaded by appointmentListResolver — read from the route snapshot:
+  //   this.route.snapshot.data['appointments']
+  // The component should NOT make its own HTTP calls for initial data.
 
-  protected filterForm = this.fb.nonNullable.group({
-    status: [this.route.snapshot.queryParamMap.get('status') ?? ''],
-    date:   [this.route.snapshot.queryParamMap.get('date')   ?? '']
-  });
+  // TODO: Define a filter reactive form with `status` and `date` controls.
 
-  readonly statuses = ['Scheduled', 'Completed', 'Cancelled', 'NoShow'];
+  // TODO: Implement onFilter():
+  //   Navigate with updated `status` and `date` query params so the resolver
+  //   reloads the data automatically.
 
-  protected onFilter(): void {
-    const { status, date } = this.filterForm.getRawValue();
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        status: status || null,
-        date:   date   || null
-      },
-      queryParamsHandling: 'merge'
-    });
-  }
-
-  protected clearFilters(): void {
-    this.filterForm.reset({ status: '', date: '' });
-    this.router.navigate(['/appointments']);
-  }
+  // TODO: Implement clearFilters():
+  //   Reset the form and navigate to /appointments with no query params.
 }

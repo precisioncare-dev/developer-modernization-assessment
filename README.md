@@ -132,30 +132,32 @@ developer-modernization-assessment/
 ├── database/
 │   ├── schema.sql        # Original schema
 │   └── seed.sql          # Sample data
-├── api/                  # .NET Core 8 Web API (scaffolded)
-│   ├── Controllers/      # AuthController, PatientsController, AppointmentsController
-│   ├── Data/             # AppDbContext (EF Core)
-│   ├── DTOs/             # Request/Response models
-│   ├── Models/           # User, Patient, Appointment entities
-│   ├── Services/         # IAuthService, IPatientService, IAppointmentService + impls
-│   ├── Program.cs        # DI, JWT, CORS, Swagger wired up
+├── api/                  # .NET Core 8 Web API scaffold
+│   ├── Controllers/      # Stub controllers (route/auth attributes set; action bodies TBD)
+│   ├── Data/             # AppDbContext — fully configured EF Core context
+│   ├── DTOs/             # Request/response models (complete)
+│   ├── Models/           # User, Patient, Appointment entities (complete)
+│   ├── Services/         # Interfaces (complete) + stub implementations (bodies TBD)
+│   ├── Program.cs        # DI, JWT, CORS, Swagger — fully wired (do not modify)
 │   ├── appsettings.json
 │   └── appsettings.example.json
-├── frontend/             # Angular 18 app (scaffolded)
+├── frontend/             # Angular 19 standalone app scaffold
 │   └── src/app/
+│       ├── app.config.ts     # Providers wired (do not modify)
+│       ├── app.routes.ts     # Routes + guard/resolver wiring (do not modify)
 │       ├── core/
-│       │   ├── guards/       # auth.guard, role.guard
-│       │   ├── interceptors/ # auth.interceptor (attaches JWT)
-│       │   ├── models/       # user, patient, appointment models
-│       │   ├── resolvers/    # patient-list, patient, patient-appointments, appointment-list
-│       │   └── services/     # AuthService, PatientService, AppointmentService
+│       │   ├── guards/       # auth.guard, role.guard — partial stubs (implement logic)
+│       │   ├── interceptors/ # auth.interceptor — partial stub (implement JWT attachment)
+│       │   ├── models/       # Typed interfaces (complete)
+│       │   ├── resolvers/    # Four stub resolvers (implement data-fetching logic)
+│       │   └── services/     # AuthService, PatientService, AppointmentService — stub methods
 │       ├── features/
-│       │   ├── auth/login/           # Reactive Form login page
-│       │   ├── patients/             # list, detail, form (all Reactive Forms)
-│       │   └── appointments/         # list, form (all Reactive Forms)
+│       │   ├── auth/login/           # Stub component + placeholder template (implement)
+│       │   ├── patients/             # Stub components + placeholder templates (implement)
+│       │   └── appointments/         # Stub components + placeholder templates (implement)
 │       └── shared/
-│           ├── components/           # navbar, layout
-│           └── validators/           # custom Angular validators
+│           ├── components/           # NavbarComponent, LayoutComponent (complete)
+│           └── validators/           # pastDateValidator, futureDateValidator, phoneValidator
 └── README.md
 ```
 
@@ -212,7 +214,7 @@ The `classic-asp/` files are provided as reference only. They require IIS with C
 
 ### Setting Up the Modern Application
 
-Boilerplate for both projects is already scaffolded for you. Follow the steps below to get running.
+The `/api` and `/frontend` directories contain scaffolded starting points. Follow the steps below to get the projects running, then implement the required functionality.
 
 #### 1. Database
 
@@ -223,53 +225,64 @@ sqlcmd -S localhost -E -i database/schema.sql
 sqlcmd -S localhost -E -i database/seed.sql
 ```
 
-> **Note:** The seed data uses plain-text passwords. Your first task is to migrate password storage to bcrypt hashing. After running the seed, update the `PasswordHash` column values using the `BCrypt.Net.BCrypt.HashPassword()` helper.
+> **Note:** The seed data uses plain-text passwords — one of your first tasks is to hash these using BCrypt and update the schema accordingly.
 
 #### 2. .NET Core API (`api/`)
 
 ```bash
 cd api
 
-# Copy the example config and fill in your values
+# Copy the example config and fill in your connection string and JWT key
 cp appsettings.example.json appsettings.Development.json
-# Edit appsettings.Development.json:
-#   - Set the SQL Server connection string
-#   - Set a strong JWT SecretKey (min 32 chars)
 
-# Restore & run
 dotnet restore
 dotnet run
 # Swagger UI: https://localhost:5001/swagger
 ```
 
-The project already includes:
-- Entity Framework Core + SQL Server provider
-- JWT Bearer authentication (wired in `Program.cs`)
-- `AppDbContext` with `User`, `Patient`, `Appointment` entities
-- Service interfaces + skeleton implementations (`Services/`)
-- `AuthController`, `PatientsController`, `AppointmentsController`
+**What's already provided:**
 
-**Your job:** complete the security hardening (password hashing, input validation) and add any missing business logic.
+| File(s) | Description |
+|---|---|
+| `PrecisionCare.Api.csproj` | NuGet references: EF Core + SQL Server, JWT Bearer, BCrypt.Net-Next, FluentValidation, Swashbuckle |
+| `Program.cs` | DI container, JWT authentication middleware, CORS, and Swagger configured |
+| `appsettings.json` / `appsettings.example.json` | Configuration schema with `JwtSettings` and `ConnectionStrings` sections |
+| `Data/AppDbContext.cs` | EF Core `DbContext` with `Users`, `Patients`, `Appointments` `DbSet`s |
+| `Models/` | Entity classes (`User`, `Patient`, `Appointment`) matching the legacy schema |
+| `DTOs/` | Request and response DTO classes for Auth, Patients, and Appointments |
+| `Services/I*.cs` | Service interfaces (`IAuthService`, `IPatientService`, `IAppointmentService`) |
+| `Services/*.cs` | **Stub** service classes — every method throws `NotImplementedException` with a TODO hint |
+| `Controllers/` | **Stub** controllers — route attributes and `[Authorize]` roles are set; action bodies throw `NotImplementedException` |
+
+**Your job:** implement the service methods and controller action bodies. Pay close attention to the security requirements: password hashing, parameterized queries, JWT generation, and role-based authorization.
 
 #### 3. Angular Front-End (`frontend/`)
 
 ```bash
 cd frontend
 npm install
-ng serve
+npx ng serve
 # App: http://localhost:4200
 ```
 
-The project already includes:
-- Standalone Angular 18 components with `ReactiveFormsModule` throughout
-- `AuthService` with JWT storage and Angular Signals
-- `AuthInterceptor` — automatically attaches the Bearer token to every request
-- `AuthGuard` and `RoleGuard` (functional guards)
-- Route resolvers: `patientListResolver`, `patientResolver`, `patientAppointmentsResolver`, `appointmentListResolver`
-- All routes wired in `app.routes.ts` with guards and resolvers attached
-- Complete SCSS styling (global utilities in `styles.scss`)
+**What's already provided:**
 
-**Your job:** connect any remaining gaps, implement error states, and add any additional features required by the assessment.
+| File(s) | Description |
+|---|---|
+| `package.json` | Angular 19, RxJS, zone.js dependencies |
+| `src/app/app.config.ts` | `provideRouter`, `provideHttpClient` with the auth interceptor, and `provideAnimations` wired up |
+| `src/app/app.routes.ts` | Full route tree with `canActivate: [authGuard]`, `canActivate: [roleGuard('Admin','Staff')]`, and `resolve:` keys attached — wiring is complete; **implement the guard/resolver bodies** |
+| `src/environments/` | `environment.ts` and `environment.prod.ts` with `apiUrl` |
+| `src/styles.scss` | Global SCSS utilities (card, btn, alert, form-field, table) |
+| `core/models/` | Typed interfaces for `User`, `Patient`, `Appointment` |
+| `core/services/` | **Stub** `AuthService`, `PatientService`, `AppointmentService` — class structure and method signatures are defined; **implement the bodies** |
+| `core/guards/auth.guard.ts` | **Partial stub** — redirects to `/login` when not authenticated; **complete the `returnUrl` query param handling** |
+| `core/guards/role.guard.ts` | **Partial stub** — auth check structure in place; **implement the role check** |
+| `core/interceptors/auth.interceptor.ts` | **Partial stub** — 401 handler skeleton present; **implement JWT token attachment** |
+| `core/resolvers/` | **Stub** resolvers with JSDoc hints — **implement the data-fetching logic** |
+| `features/**/` | **Stub** component classes (imports declared, TODO comments guide implementation) and **placeholder HTML templates** — **implement Reactive Forms, data binding, and validation** |
+| `shared/components/` | `NavbarComponent` and `LayoutComponent` (complete — no changes needed) |
+| `shared/validators/` | Custom validators: `pastDateValidator`, `futureDateValidator`, `phoneValidator` |
 
 ---
 

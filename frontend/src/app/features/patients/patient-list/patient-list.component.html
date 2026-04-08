@@ -1,60 +1,11 @@
-<div class="page-header">
-  <h1>Patients</h1>
-
-  <div class="toolbar">
-    <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search-form">
-      <input
-        type="text"
-        formControlName="search"
-        placeholder="Search by name…"
-        class="search-input"
-      />
-      <button type="submit" class="btn btn-secondary">Search</button>
-    </form>
-    <a routerLink="/patients/new" class="btn btn-success">+ Add Patient</a>
-  </div>
-</div>
-
-@if (errorMessage) {
-  <div class="alert alert-error">{{ errorMessage }}</div>
-}
-
-<div class="card table-card">
-  <table>
-    <thead>
-      <tr>
-        <th>Last Name</th>
-        <th>First Name</th>
-        <th>Date of Birth</th>
-        <th>Gender</th>
-        <th>Phone</th>
-        <th>Email</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @if (patients.length === 0) {
-        <tr>
-          <td colspan="7" class="empty-state">No patients found.</td>
-        </tr>
-      }
-      @for (patient of patients; track patient.patientId) {
-        <tr>
-          <td>{{ patient.lastName }}</td>
-          <td>{{ patient.firstName }}</td>
-          <td>{{ patient.dateOfBirth | date:'mediumDate' }}</td>
-          <td>{{ patient.gender }}</td>
-          <td>{{ patient.phone ?? '—' }}</td>
-          <td>{{ patient.email ?? '—' }}</td>
-          <td class="actions">
-            <a [routerLink]="['/patients', patient.patientId]" class="link-view">View</a>
-            <a [routerLink]="['/patients', patient.patientId, 'edit']" class="link-edit">Edit</a>
-            @if (auth.hasRole('Admin')) {
-              <button (click)="onDelete(patient.patientId)" class="link-delete">Delete</button>
-            }
-          </td>
-        </tr>
-      }
-    </tbody>
-  </table>
-</div>
+<!-- TODO: Implement the patient list template.
+  Required elements:
+  - A page header with the title "Patients" and a "+ Add Patient" link
+  - A search form (Reactive Form) with a text input and submit button
+  - A table displaying: Last Name, First Name, Date of Birth, Gender, Phone, Email, Actions
+  - @for loop over the patients array (bound from route resolver data)
+  - View / Edit links per row; Delete button visible only to Admin role users
+  - An error alert when a delete operation fails
+  - An empty-state row when no patients are found
+-->
+<p>TODO: Implement patient list template</p>

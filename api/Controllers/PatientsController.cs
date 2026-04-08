@@ -21,8 +21,8 @@ public class PatientsController(IPatientService patientService) : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<PatientDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll([FromQuery] string? search)
     {
-        var patients = await patientService.GetAllAsync(search);
-        return Ok(patients);
+        // TODO: Delegate to patientService.GetAllAsync(search) and return 200 OK.
+        throw new NotImplementedException();
     }
 
     /// <summary>Get a single patient by ID.</summary>
@@ -31,22 +31,23 @@ public class PatientsController(IPatientService patientService) : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
-        var patient = await patientService.GetByIdAsync(id);
-        return patient is null ? NotFound() : Ok(patient);
+        // TODO: Return 200 OK with the patient, or 404 Not Found if absent.
+        throw new NotImplementedException();
     }
 
-    /// <summary>Create a new patient.</summary>
+    /// <summary>Create a new patient. Requires Admin or Staff role.</summary>
     [HttpPost]
     [Authorize(Roles = "Admin,Staff")]
     [ProducesResponseType(typeof(PatientDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] CreatePatientRequest request)
     {
-        var patient = await patientService.CreateAsync(request, CurrentUserId);
-        return CreatedAtAction(nameof(GetById), new { id = patient.PatientId }, patient);
+        // TODO: Call patientService.CreateAsync(request, CurrentUserId).
+        // Return 201 Created with a Location header pointing to the new resource.
+        throw new NotImplementedException();
     }
 
-    /// <summary>Update an existing patient.</summary>
+    /// <summary>Update an existing patient. Requires Admin or Staff role.</summary>
     [HttpPut("{id:int}")]
     [Authorize(Roles = "Admin,Staff")]
     [ProducesResponseType(typeof(PatientDto), StatusCodes.Status200OK)]
@@ -54,18 +55,18 @@ public class PatientsController(IPatientService patientService) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Update(int id, [FromBody] UpdatePatientRequest request)
     {
-        var patient = await patientService.UpdateAsync(id, request);
-        return patient is null ? NotFound() : Ok(patient);
+        // TODO: Return 200 OK with the updated patient, or 404 Not Found.
+        throw new NotImplementedException();
     }
 
-    /// <summary>Delete a patient. Admin only.</summary>
+    /// <summary>Delete a patient. Requires Admin role.</summary>
     [HttpDelete("{id:int}")]
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
-        var deleted = await patientService.DeleteAsync(id);
-        return deleted ? NoContent() : NotFound();
+        // TODO: Return 204 No Content on success, or 404 Not Found.
+        throw new NotImplementedException();
     }
 }

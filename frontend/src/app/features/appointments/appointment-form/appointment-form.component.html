@@ -1,81 +1,13 @@
-<h1>Add Appointment</h1>
-
-@if (errorMessage) {
-  <div class="alert alert-error">{{ errorMessage }}</div>
-}
-
-<div class="card form-card">
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-    <div class="form-field">
-      <label>Patient <span class="required">*</span></label>
-      <select formControlName="patientId" [class.invalid]="f.patientId.invalid && f.patientId.touched">
-        <option [value]="0">-- Select Patient --</option>
-        @for (p of patients; track p.patientId) {
-          <option [value]="p.patientId">{{ p.lastName }}, {{ p.firstName }}</option>
-        }
-      </select>
-      @if (f.patientId.invalid && f.patientId.touched) {
-        <span class="field-error">Please select a patient.</span>
-      }
-    </div>
-
-    <div class="form-grid">
-      <div class="form-field">
-        <label>Date &amp; Time <span class="required">*</span></label>
-        <input type="datetime-local" formControlName="appointmentDate"
-               [class.invalid]="f.appointmentDate.invalid && f.appointmentDate.touched" />
-        @if (f.appointmentDate.invalid && f.appointmentDate.touched) {
-          <span class="field-error">Appointment date is required.</span>
-        }
-      </div>
-
-      <div class="form-field">
-        <label>Duration (minutes) <span class="required">*</span></label>
-        <input type="number" formControlName="duration" min="5" max="480"
-               [class.invalid]="f.duration.invalid && f.duration.touched" />
-        @if (f.duration.invalid && f.duration.touched) {
-          <span class="field-error">Duration must be between 5 and 480 minutes.</span>
-        }
-      </div>
-
-      <div class="form-field">
-        <label>Status <span class="required">*</span></label>
-        <select formControlName="status">
-          @for (s of statuses; track s) {
-            <option [value]="s">{{ s }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="form-field">
-        <label>Provider <span class="required">*</span></label>
-        <input type="text" formControlName="providerName"
-               [class.invalid]="f.providerName.invalid && f.providerName.touched" />
-        @if (f.providerName.invalid && f.providerName.touched) {
-          <span class="field-error">Provider name is required.</span>
-        }
-      </div>
-    </div>
-
-    <div class="form-field">
-      <label>Reason <span class="required">*</span></label>
-      <input type="text" formControlName="reason"
-             [class.invalid]="f.reason.invalid && f.reason.touched" />
-      @if (f.reason.invalid && f.reason.touched) {
-        <span class="field-error">Reason is required (max 500 characters).</span>
-      }
-    </div>
-
-    <div class="form-field">
-      <label>Notes</label>
-      <textarea formControlName="notes" rows="3"></textarea>
-    </div>
-
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary" [disabled]="isLoading">
-        {{ isLoading ? 'Saving…' : 'Save Appointment' }}
-      </button>
-      <a routerLink="/appointments" class="btn btn-secondary">Cancel</a>
-    </div>
-  </form>
-</div>
+<!-- TODO: Implement the add appointment form template using Angular Reactive Forms.
+  Required elements:
+  - [formGroup]="form" and (ngSubmit)="onSubmit()" on the <form>
+  - Fields (all with formControlName):
+      patientId* (select dropdown populated from patients array),
+      appointmentDate* (datetime-local), duration* (number),
+      status* (select: Scheduled / Completed / Cancelled / NoShow),
+      providerName*, reason*, notes (textarea)
+  - Validation error messages shown when a control is invalid AND touched
+  - Submit button (disabled while saving); Cancel link back to /appointments
+  - Error alert shown when the save operation fails
+-->
+<p>TODO: Implement appointment form template</p>
